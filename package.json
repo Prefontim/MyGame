@@ -1,0 +1,24 @@
+{
+  "name": "NerfGunZ",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Tim Robbins",
+  "dependencies": {
+    "createjs": "1.0.1",
+    "lodash": "^4.17.4"
+  },
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --progress --watch",
+    "start": "webpack-dev-server --open"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.1.1",
+    "css-loader": "^0.28.7",
+    "file-loader": "^1.1.5",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.7.1",
+    "webpack-dev-server": "^2.9.1"
+  }
+}
