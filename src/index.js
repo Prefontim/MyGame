@@ -1,61 +1,43 @@
 require('./style.css');
+import config from './config';
+import CONSTANTS from './constants';
+import Gun from './objects/gun';
+import helper from './services/CreateJSHelper';
+import LevelService from './services/LevelService';
 
 function init() {
-    console.log(createjs);
-    var stage = new createjs.Stage("demoCanvas");
-    var shape = new createjs.Shape();
-    shape.graphics.beginFill("#59B100").drawRect(0, 0, 500, 200);
 
-    stage.on('click', function(evt) {
-        console.log('evt', evt);
+    var stage = helper.getStage();
+    buildArena();
+    LevelService.loadLevel(1);
+    loadGun();
 
 
-        var ball = new createjs.Shape();
 
-        ball.graphics.beginFill('orange').drawCircle(0, 0, 20, 20);
-        ball.set({visible: false});
-        stage.addChild(ball);
-        stage.update();
-        var cnt = 0;
-        setTimeout(function() {
-            ball.set({visible: true, x: 250, y: 250});
-           // stage.update();
-        //
-             createjs.Tween.get(ball).to({x: evt.stageX, y: evt.stageY, scaleX:.3, scaleY: .3}, 700, createjs.Ease.quadOut);
-        //
-         }, 1);
-        createjs.Ticker.setFPS(60);
-        createjs.Ticker.addEventListener("tick", stage);
+    createjs.Ticker.setFPS(60);
+    createjs.Ticker.addEventListener("tick", stage);
 
+}
 
-        //stage.update();
-    });
+function buildArena() {
+    var stage = helper.getStage();
+    var field = new createjs.Shape();
+    field.graphics.beginStroke("black").drawRect(0, 0, config.stageSize.w, CONSTANTS.FIELD_HEIGHT);
+    stage.addChild(field);
 
-    stage.addChild(shape);
+    var overlook = new createjs.Shape();
+    overlook.graphics.beginStroke("red").drawRect(0, CONSTANTS.FIELD_HEIGHT, config.stageSize.w, CONSTANTS.OVERLOOK_HEIGHT);
+    stage.addChild(overlook);
 
     stage.update();
-
-
-
 }
 
-var stage = {
-    w: 500,
-    h: 300
-};
-
-function abs(shape, x, y) {
-    return {
-        x: stage.w - shape.x + x,
-        y: stage.h - shape.y + y
-    };
+function loadGun() {
+    new Gun({x: CONSTANTS.STAGE_WIDTH / 2, y: CONSTANTS.STAGE_HEIGHT - 40});
 }
 
-function handleClick(event){
-    console.log('event', event);
-    // Click happenened
-}
-
-setTimeout(function() {
-    init();
-}, 1000);
+window.addEventListener('load', function () {
+    setTimeout(function() {
+        init();
+    }, 1000);
+}, true);
