@@ -7,4 +7,6 @@ constants.FIELD_HEIGHT = constants.STAGE_HEIGHT - constants.OVERLOOK_HEIGHT;
 constants.HITTER = 'hitter';
 constants.HITTABLE = 'hittable';
 
+constants.FPS = 60;
+
 export default constants;

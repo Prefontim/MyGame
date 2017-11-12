@@ -1,69 +1,79 @@
 import helper from '../services/CreateJSHelper';
 import MovementService from '../services/MovementService';
 import CONSTANTS from '../constants';
+import idle1 from '../assets/enemies/zombie_male/Idle1.png';
 
-function Enemy() {
-    let movePattern = [
-        {
-            y: 10
-        },
-        {
-            wait: 1
+class Enemy {
+    constructor({startCoord, movementPattern}) {
+        this.movementPattern = movementPattern;
+
+        this.moveIndex = 0;
+        this.stage = helper.getStage();
+        // this.enemyShape = new createjs.Shape();
+        // this.enemyShape.graphics.beginFill('red').drawRect(0, 0, 20, 30);
+        this.enemyShape = new createjs.Bitmap(idle1);
+
+        this.enemyShape.setBounds(0, 0, 20, 30);
+        this.enemyShape.set({x: startCoord.x, y: startCoord.y, scaleX: .2, scaleY: .2});
+        this.stage.addChild(this.enemyShape);
+        this.stage.update();
+    }
+
+
+
+
+
+    getShape() {
+        return this.enemyShape;
+    }
+
+    beginMovement() {
+        //this.doNextMove();
+        if(this.movementPattern) {
+            this.movementPattern.begin();
         }
-    ];
-    let moveIndex = 0;
-    var stage = helper.getStage();
-    var enemyShape = new createjs.Shape();
-    enemyShape.graphics.beginFill('red').drawRect(0, 0, 20, 30);
-    enemyShape.setBounds(0, 0, 20, 30);
-    stage.addChild(enemyShape);
-    stage.update();
-
-    this.getShape = function() {
-        return enemyShape;
-    };
-
-    this.beginMovement = function () {
-        doNextMove();
         MovementService.registerMover({
             type: CONSTANTS.HITTABLE,
             object: this
         });
     };
 
-    this.onHit = function() {
-        enemyShape.graphics.beginFill('white').drawRect(0, 0, 20, 30);
-        setTimeout(() => this.destroy(), 1000);
+    onHit() {
+        this.enemyShape.graphics.beginFill('white').drawRect(0, 0, 20, 30);
+        setTimeout(() => {
+            this.enemyShape.graphics.beginFill('red').drawRect(0, 0, 20, 30);
+        }, 500);
 
-    };
+        //setTimeout(() => this.destroy(), 1000);
 
-    this.destroy = function() {
+    }
+
+    destroy() {
         MovementService.remove(this);
-        stage.removeChild(enemyShape);
-    };
+        this.stage.removeChild(this.enemyShape);
+    }
 
 
 
-    function doNextMove() {
+    doNextMove() {
         let wait = 1;
-        if(movePattern[moveIndex].y) {
-            enemyShape.set({y: enemyShape.y + movePattern[moveIndex].y});
-            stage.update();
-        } else if(movePattern[moveIndex].wait) {
-            wait = movePattern[moveIndex].wait * 500;
+        if(this.movePattern[moveIndex].y) {
+            this.enemyShape.set({y: enemyShape.y + movePattern[moveIndex].y});
+            this.stage.update();
+        } else if(this.movePattern[moveIndex].wait) {
+            wait = this.movePattern[moveIndex].wait * 500;
         }
 
         setTimeout(function() {
-            doNextMove();
+            this.doNextMove();
         }, wait);
 
-        moveIndex++;
-        if(moveIndex >= movePattern.length) {
-            moveIndex = 0;
+        this.moveIndex++;
+        if(this.moveIndex >= this.movePattern.length) {
+            this.moveIndex = 0;
         }
     }
 
-    return this;
 }
 
 export default Enemy;

@@ -4,6 +4,7 @@ import EnemyFactory from './EnemyFactory';
 import _ from 'lodash';
 let instance = null;
 
+
 export default (function() {
     if(!instance) {
         instance = new LevelService();
@@ -17,7 +18,8 @@ function LevelService() {
     const levelConfig = [
         {
             color: 'green',
-            enemyInterval: 5
+            enemyInterval: 5,
+            maxEnemies: 10
         }
     ];
 
@@ -35,34 +37,24 @@ function LevelService() {
         stage.update();
 
         launchEnemies();
-
-        watchForHits();
     }
 
     function launchEnemies() {
+        launchEnemy();
         setInterval(launchEnemy, currConfig.enemyInterval * 1000);
+        //launchEnemy();
     }
 
     function launchEnemy() {
-        let enemy = EnemyFactory.getEnemy();
-        var x = Math.random() * CONSTANTS.STAGE_WIDTH;
-       // x = 500;
-        enemy.getShape().set({visible: true, x: x, y: 10});
-        enemy.x = Math.random() * CONSTANTS.STAGE_WIDTH;
-        enemy.y = 10;
+        /*
+        types
+         */
+        let x = Math.random() * (CONSTANTS.STAGE_WIDTH / 2) + 200;
+        let y = (Math.random()) * 300 + 100;
+        let enemy = EnemyFactory.getEnemy('zombie', {startCoord: {x: x, y: y}});
 
-        var stage = helper.getStage();
-        stage.update();
-        enemy.beginMovement();
+        enemy.onHit
         enemies.push(enemy);
-    }
-
-    function watchForHits() {
-        setInterval(function() {
-            _.each(enemies, function (enemy) {
-
-            })
-        });
     }
 
     return {

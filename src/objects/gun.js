@@ -20,7 +20,7 @@ export default function Gun(options) {
 
         var ball = BallFactory.getBall({height: 200});
         ball.getShape().set({visible: true, x: gunShape.x, y: gunShape.y});
-        ball.fireTo({x: evt.stageX, y: evt.stageY}, 200);
+        ball.fireTo({x: evt.stageX, y: evt.stageY}, 300);
         MovementService.registerMover({
             type: CONSTANTS.HITTER,
             object: ball
