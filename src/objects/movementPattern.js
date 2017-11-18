@@ -33,6 +33,7 @@ export default class MovementPattern {
 
     nextMove() {
         let nextCoord = this.getNextCoord();
+        console.log('nextMove', this._obj.id);
         if(nextCoord) {
             // this._shape.set({
             //     x: nextCoord.x,
@@ -45,9 +46,9 @@ export default class MovementPattern {
                 y: shape.y
             };
 
-
             this.currAnim = createAnimation(this._obj, startCoord, nextCoord, this.pattern.velocity, noGravity, () => {
                 this.moveIndex++;
+                console.log('animation end', this._obj.id, this.playing, this.pattern.repeat);
                 if(this.pattern.repeat && this.playing) {
                     setTimeout(() => {
                         if(this.playing) {
@@ -62,6 +63,7 @@ export default class MovementPattern {
     }
 
     stop() {
+        console.log('stop', this._obj.id);
         this.playing = false;
         this.currAnim.stop();
     }

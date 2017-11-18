@@ -1,8 +1,9 @@
 import helper from '../services/CreateJSHelper';
 import MovementService from '../services/MovementService';
+import {canMove, canEmitEvents} from '../behaviors';
 import CONSTANTS from '../constants'
 
-export default function({startCoord, image, movePattern}) {
+export default function({id, startCoord, image, movePattern}) {
     let state = {};
     let shape = null;
     let stage = helper.getStage();
@@ -29,14 +30,19 @@ export default function({startCoord, image, movePattern}) {
     const getShape = () => shape;
 
     const destroy = () => {
+        state.emit('destroy', state);
+      //  MovementService.remove(state);
         stage.removeChild(shape);
-    }
+    };
 
     state = {
+        id: id,
         getShape: getShape,
         destroy: destroy,
         onHit: onHit
     };
+
+    state = Object.assign(state, canMove(state, movePattern), canEmitEvents(state));
 
     return state;
 }

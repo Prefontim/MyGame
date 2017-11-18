@@ -19,7 +19,7 @@ function LevelService() {
         {
             color: 'green',
             enemyInterval: 5,
-            maxEnemies: 10
+            maxEnemies: 3
         }
     ];
 
@@ -41,8 +41,14 @@ function LevelService() {
 
     function launchEnemies() {
         launchEnemy();
-        setInterval(launchEnemy, currConfig.enemyInterval * 1000);
+        setInterval(maybeLaunchEnemy, currConfig.enemyInterval * 1000);
         //launchEnemy();
+    }
+
+    function maybeLaunchEnemy() {
+        if(enemies.length < currConfig.maxEnemies) {
+            launchEnemy();
+        }
     }
 
     function launchEnemy() {
@@ -53,7 +59,14 @@ function LevelService() {
         let y = (Math.random()) * 300 + 100;
         let enemy = EnemyFactory.getEnemy('zombie', {startCoord: {x: x, y: y}});
 
-        enemy.onHit
+        enemy.on('destroy', () => {
+            _.remove(enemies, currEnemy => {
+                return currEnemy.id === enemy.id;
+            });
+        });
+
+        enemy.beginMovement();
+
         enemies.push(enemy);
     }
 

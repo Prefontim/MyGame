@@ -3,11 +3,12 @@ import createAnimation from '../services/Animation';
 import MovementService from '../services/MovementService';
 import {warp, noGravity} from '../movement/movementPathTypes';
 
-export default function Ball({height = 0}) {
+export default function Ball({height = 0, id}) {
     this.type = 'nerf';
     this.radius = 5;
     this.height = height;
     this.color = 'yellow';
+    this.id = id;
 
     let currAnim = null;
 
@@ -61,7 +62,7 @@ export default function Ball({height = 0}) {
     }
 
     const removeBall = () => {
-        MovementService.remove(ballContainer);
+       // MovementService.remove(this);
         stage.removeChild(ballContainer);
         stage.update();
     };

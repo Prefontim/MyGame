@@ -14,20 +14,24 @@ function MovementService() {
 
     function registerMover(mover) {
         objects.push(mover);
+        console.log('added', mover.object.id);
 
         if(!checkerInterval) {
             checkerInterval = setInterval(checkForHits, 50);
         }
     }
 
-    function remove(shape) {
-        let idx = _.findIndex(objects, function(object) {
-            return object.object.getShape().id === shape.id;
-        });
-        if(idx !== -1) {
-            objects.splice(idx, 1);
-        }
-    }
+    // function remove(object) {
+    //     console.log('objects length', objects.length);
+    //     let idx = _.findIndex(objects, function(mover) {
+    //         console.log(mover.object.id, object.id);
+    //         return mover.object.id === object.id;
+    //     });
+    //         console.log('remove, idx ', idx );
+    //     if(idx !== -1) {
+    //         objects.splice(idx, 1);
+    //     }
+    // }
 
     function checkForHits() {
         let hitters = _.filter(objects, {type: CONSTANTS.HITTER});
@@ -36,15 +40,15 @@ function MovementService() {
             _.each(hittables, function (hittable, hittableIdx) {
                 let hitterShape = hitter.object.getShape();
                 let hittableShape = hittable.object.getShape();
-
+                console.log('checking', hittable.object.id);
 
 
                 //console.log(hitterShape.x  + ' > ' +  hittableShape.x + ' && ' +  hitterShape.x + ' < ' +  hittableShape.graphics.command.w);
                 if(doesHitterOverlapHorizontally(hitterShape, hittableShape) && isHitterCloseToYAxis(hitterShape, hittableShape)) {
-                    console.log('hit');
+                    //console.log('hit');
 
                     if(hitterShape.getBounds().height < hittableShape.getBounds().height + 10) {
-                        console.log('3d hit');
+                        console.log('3d hit', hittable.object.id);
                         hittable.object.onHit();
                         objects.splice(hittableIdx, 1);
 
@@ -97,8 +101,8 @@ function MovementService() {
     }
 
     return {
-        registerMover: registerMover,
-        remove: remove
+        registerMover: registerMover
+      //  remove: remove
     };
 }
 
